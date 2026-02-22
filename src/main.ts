@@ -47,5 +47,6 @@ async function bootstrap() {
 		})
 	);
 	await app.listen(config.getOrThrow<number>('APPLICATION_PORT') ?? 3000);
+	console.log(process.env.DATABASE_URL);
 }
 bootstrap();

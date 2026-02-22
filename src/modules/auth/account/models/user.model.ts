@@ -12,7 +12,7 @@ export class UserModel {
 	password: string;
 
 	@Field(() => String)
-	username: string;
+	userName: string;
 
 	@Field(() => String, { nullable: true })
 	displayName?: string;
