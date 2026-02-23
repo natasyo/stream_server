@@ -2,6 +2,8 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AccountService } from './account.service';
 import { UserModel } from './models/user.model';
 import { CreateUserInput } from './inputs/create-user.input';
+import { Authorizaed } from '@/src/shared/decorators/autorized.decorator';
+import { Autorization } from '@/src/shared/decorators/auth.decorator';
 
 @Resolver('Account')
 export class AccountResolver {
@@ -10,6 +12,12 @@ export class AccountResolver {
 	@Query(() => [UserModel], { name: 'findAllUsers' })
 	public async findAll() {
 		return this.accountService.findAll();
+	}
+
+	@Autorization()
+	@Query(() => UserModel, { name: 'getCurrentUser' })
+	public async getCurrentUser(@Authorizaed('id') id: string) {
+		return this.accountService.getcurrentUser(id);
 	}
 
 	@Mutation(() => Boolean, { name: 'createUser' })

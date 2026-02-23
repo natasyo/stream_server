@@ -10,7 +10,7 @@ export class SessionResolver {
 
 	@Mutation(() => UserModel, { name: 'loginUser' })
 	async login(
-		@Context() { req, res }: GqlContext,
+		@Context() { req }: GqlContext,
 		@Args('loginInput') loginInput: LoginInput
 	) {
 		return this.sessionService.login(req, loginInput);
@@ -18,6 +18,7 @@ export class SessionResolver {
 
 	@Mutation(() => Boolean, { name: 'logoutUser' })
 	async logout(@Context() { req, res }: GqlContext) {
+		console.log('logout');
 		return this.sessionService.logout(req);
 	}
 }

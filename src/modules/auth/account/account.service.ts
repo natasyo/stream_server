@@ -9,7 +9,13 @@ export class AccountService {
 	public async findAll() {
 		return this.prismaService.user.findMany();
 	}
-
+	public async getcurrentUser(id: string) {
+		return this.prismaService.user.findUnique({
+			where: {
+				id
+			}
+		});
+	}
 	public async create({ email, password, userName }: CreateUserInput) {
 		const isExistEmail = await this.prismaService.user.findUnique({
 			where: { email }
