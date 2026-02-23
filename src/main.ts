@@ -41,8 +41,19 @@ async function bootstrap() {
 				sameSite: 'lax'
 			},
 			store: new RedisStore({
-				client: redis,
-				prefix: config.getOrThrow<string>('SESSION_FOLDER')
+				client: {
+					get: (key: string) => redis.client.get(key),
+					set: (key: string, val: string, options?: any) => {
+						const ttl = 24 * 60 * 60;
+						if (ttl) {
+							return redis.client.set(key, val, 'EX', ttl);
+						}
+						return redis.client.set(key, val);
+					},
+					del: (key: string) => redis.client.del(key).then(() => {})
+				},
+				prefix: config.getOrThrow<string>('SESSION_FOLDER'),
+				disableTouch: true
 			})
 		})
 	);
