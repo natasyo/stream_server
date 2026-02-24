@@ -19,9 +19,12 @@ async function bootstrap() {
 	app.use(cookieParser(config.getOrThrow<string>('COOKIE_SECRET')));
 	app.useGlobalPipes(new ValidationPipe({ transform: true }));
 	app.enableCors({
-		origin: config.getOrThrow<string>('ALLOW_ORIGIN'),
+		origin: [
+			config.getOrThrow<string>('ALLOW_ORIGIN'),
+			config.getOrThrow<string>('APP_URL')
+		],
 		credentials: true,
-		exposedHeaders: ['Set-Cookie']
+		// exposedHeaders: ['Set-Cookie']
 	});
 	app.use(
 		session({
@@ -57,6 +60,7 @@ async function bootstrap() {
 			})
 		})
 	);
+
 	await app.listen(config.getOrThrow<number>('APPLICATION_PORT') ?? 3000);
 	console.log(process.env.DATABASE_URL);
 }

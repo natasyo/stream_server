@@ -9,7 +9,7 @@ export class AccountService {
 	public async findAll() {
 		return this.prismaService.user.findMany();
 	}
-	public async getcurrentUser(id: string) {
+	public async getCurrentUser(id: string) {
 		return this.prismaService.user.findUnique({
 			where: {
 				id
