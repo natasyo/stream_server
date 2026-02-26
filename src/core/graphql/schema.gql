@@ -13,20 +13,51 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type DeviceModel {
+  browser: String!
+  os: String!
+  type: String!
+}
+
+type LocationModel {
+  city: String!
+  country: String!
+  latitude: Float!
+  longitude: Float!
+}
+
 input LoginInput {
   login: String!
   password: String!
 }
 
 type Mutation {
+  clearSessionCookie: Boolean!
   createUser(createUserInput: CreateUserInput!): Boolean!
+  getOtherSessions: [UserModel!]!
   loginUser(loginInput: LoginInput!): UserModel!
   logoutUser: Boolean!
+  removeSession(id: String!): Boolean!
 }
 
 type Query {
   findAllUsers: [UserModel!]!
+  findCurrentSession: SessionModel!
+  findSessionByUser: [SessionModel!]!
   getCurrentUser: UserModel!
+}
+
+type SessionMetadataModel {
+  deviceInfo: DeviceModel!
+  ip: String!
+  location: LocationModel!
+}
+
+type SessionModel {
+  createdAt: DateTime!
+  id: ID!
+  metadata: SessionMetadataModel!
+  userId: String!
 }
 
 type UserModel {

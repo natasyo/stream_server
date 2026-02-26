@@ -3,7 +3,7 @@ import { AccountService } from './account.service';
 import { UserModel } from './models/user.model';
 import { CreateUserInput } from './inputs/create-user.input';
 import { Authorized } from '@/src/shared/decorators/autorized.decorator';
-import { Autorization } from '@/src/shared/decorators/auth.decorator';
+import { Authorization } from '@/src/shared/decorators/auth.decorator';
 
 @Resolver('Account')
 export class AccountResolver {
@@ -14,7 +14,7 @@ export class AccountResolver {
 		return this.accountService.findAll();
 	}
 
-	@Autorization()
+	@Authorization()
 	@Query(() => UserModel, { name: 'getCurrentUser' })
 	public async getCurrentUser(@Authorized('id') id: string) {
 		console.log('Fetching current user with ID:', id);
