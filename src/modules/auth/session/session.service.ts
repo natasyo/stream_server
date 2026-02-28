@@ -28,37 +28,42 @@ export class SessionService {
 		if (!userId) throw new NotFoundException('User not found');
 
 		const sessionName: string = this.config.getOrThrow('SESSION_FOLDER');
-		const sessionIds = await this.redisService.client.smembers(
-			`${sessionName}:${userId}`
-		);
+		// const sessionIds = await this.redisService.client.get(`${sessionName}`);
+		const keys = await this.redisService.client.keys(`${sessionName}*`);
 
-		const userSessions: Array<SessionData & { id: string }> = [];
-		for (const id of sessionIds) {
-			const sessionData = await this.redisService.client.get(
-				`${sessionName}:${id}`
-			);
-			if (!sessionData) continue;
-			const session = JSON.parse(sessionData) as SessionData;
-			if (id !== req.sessionID) {
-				userSessions.push({
-					...session,
-					id
-				});
-			}
+		for (const key of keys) {
+			const session = await this.redisService.client.get(key);
+			console.log(session);
 		}
+		const userSessions: Array<SessionData & { id: string }> = [];
+		// for (const id of sessionIds) {
+		// 	const sessionData = await this.redisService.client.get(
+		// 		`${sessionName}:${id}`
+		// 	);
+		// 	if (!sessionData) continue;
+		// 	const session = JSON.parse(sessionData) as SessionData;
+		// 	if (id !== req.sessionID) {
+		// 		userSessions.push({
+		// 			...session,
+		// 			id
+		// 		});
+		// 	}
+		// }
 		return userSessions;
 	}
 
-	async findCurrent(req: Request) {
+	async findCurrent(req: Request): Promise<SessionData & { id: string }> {
 		const sessionId = req.session.id;
 		if (!sessionId) throw new NotFoundException('User not found');
 		const sessionData = await this.redisService.client.get(
-			`${this.config.getOrThrow('SESSION_FOLDER')}:${sessionId}`
+			`${this.config.getOrThrow('SESSION_FOLDER')}${sessionId}`
 		);
+		console.log(`${this.config.getOrThrow('SESSION_FOLDER')}${sessionId}`);
 		if (!sessionData) throw new NotFoundException('User not found');
 		const session = JSON.parse(sessionData) as SessionData;
 		return {
 			...session,
+			createdAt: new Date(session.createdAt),
 			id: sessionId
 		};
 	}
@@ -85,7 +90,7 @@ export class SessionService {
 			throw new UnauthorizedException('Invalid credentials');
 		}
 		const sessionMetadata = getSessionMetadata(req, userAgent);
-		return new Promise<UserModel>((resolve, reject) => {
+		await new Promise<void>((resolve, reject) => {
 			req.session.userId = user.id;
 			req.session.createdAt = new Date();
 			req.session.metadata = sessionMetadata;
@@ -98,11 +103,33 @@ export class SessionService {
 						)
 					);
 				}
-				resolve(user as UserModel);
+				resolve();
 			});
 		});
+		await this.redisService.client.sadd(
+			`user:${this.config.getOrThrow('SESSION_FOLDER')}${user.id}`,
+			req.session.id
+		);
+		const ttl = await this.redisService.client.ttl(
+			`${this.config.getOrThrow('SESSION_FOLDER')}${req.session.id}`
+		);
+		if (ttl > 0) {
+			await this.redisService.client.expire(
+				`user:${this.config.getOrThrow('SESSION_FOLDER')}${user.id}`,
+				ttl
+			);
+		}
+		return user as UserModel;
 	}
 	async logout(req: Request) {
+		const userId = req.session.userId;
+		const sessionId = req.session.id;
+		if (userId) {
+			await this.redisService.client.srem(
+				`user:${this.config.getOrThrow('SESSION_FOLDER')}${userId}`,
+				sessionId
+			);
+		}
 		return new Promise((resolve, reject) => {
 			req.session.destroy(err => {
 				if (err) {
@@ -129,6 +156,7 @@ export class SessionService {
 		await this.redisService.client.del(
 			`${this.config.getOrThrow('SESSION_FOLDER')}:${id}`
 		);
+
 		return true;
 	}
 }
