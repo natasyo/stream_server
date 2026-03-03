@@ -37,8 +37,27 @@ services:
         networks:
             - stream_server
 
+
+    mailpit:
+        image: axllent/mailpit
+        container_name: mailpit
+        restart: unless-stopped
+        volumes:
+            - ./data:/data
+        ports:
+            - 8025:8025
+            - 1025:1025
+        environment:
+            MP_MAX_MESSAGES: 5000
+            MP_DATABASE: /data/mailpit.db
+            MP_SMTP_AUTH_ACCEPT_ANY: 1
+            MP_SMTP_AUTH_ALLOW_INSECURE: 1
+            MP_SMTP_AUTH_USERNAME: "test"
+            MP_SMTP_AUTH_PASSWORD: "1234"
+
 volumes:
     postgres_data:
     redis_data:
+    mailpit:
 networks:
     stream_server:

@@ -1,8 +1,8 @@
 import { PrismaService } from '@/src/core/prisma/prisma.service';
 import {
+	BadRequestException,
 	ConflictException,
 	Injectable,
-	InternalServerErrorException,
 	NotFoundException,
 	UnauthorizedException
 } from '@nestjs/common';
@@ -10,17 +10,19 @@ import { LoginInput } from './inputs/login.input';
 import { verify } from 'argon2';
 import { Request } from 'express';
 import { ConfigService } from '@nestjs/config';
-import { UserModel } from '../account/models/user.model';
 import { getSessionMetadata } from '@/src/shared/utils/session-metadata.util';
 import { RedisService } from '@/src/core/redis/redis.service';
 import { type SessionData } from 'express-session';
+import { destroySession, saveSession } from '@/src/shared/utils/session.util';
+import { VerificationService } from '@/src/modules/auth/verification/verification.service';
 
 @Injectable()
 export class SessionService {
 	public constructor(
 		private readonly prismaService: PrismaService,
 		private readonly config: ConfigService,
-		private readonly redisService: RedisService
+		private readonly redisService: RedisService,
+		private readonly verificationService: VerificationService
 	) {}
 
 	async findByUser(req: Request) {
@@ -89,61 +91,24 @@ export class SessionService {
 		if (!isValidPassword) {
 			throw new UnauthorizedException('Invalid credentials');
 		}
-		const sessionMetadata = getSessionMetadata(req, userAgent);
-		await new Promise<void>((resolve, reject) => {
-			req.session.userId = user.id;
-			req.session.createdAt = new Date();
-			req.session.metadata = sessionMetadata;
-			req.session.save(err => {
-				if (err) {
-					console.error('Failed to save session:', err);
-					return reject(
-						new InternalServerErrorException(
-							'Failed to save session'
-						)
-					);
-				}
-				resolve();
-			});
-		});
-		await this.redisService.client.sadd(
-			`user:${this.config.getOrThrow('SESSION_FOLDER')}${user.id}`,
-			req.session.id
-		);
-		const ttl = await this.redisService.client.ttl(
-			`${this.config.getOrThrow('SESSION_FOLDER')}${req.session.id}`
-		);
-		if (ttl > 0) {
-			await this.redisService.client.expire(
-				`user:${this.config.getOrThrow('SESSION_FOLDER')}${user.id}`,
-				ttl
+		if (!user.isEmailVerified) {
+			await this.verificationService.sendVerificationToken(user);
+			throw new BadRequestException(
+				'Email not verified. Go to your email to verify'
 			);
 		}
-		return user as UserModel;
+		const sessionMetadata = getSessionMetadata(req, userAgent);
+
+		return await saveSession(
+			req,
+			user,
+			this.redisService,
+			this.config,
+			sessionMetadata
+		);
 	}
 	async logout(req: Request) {
-		const userId = req.session.userId;
-		const sessionId = req.session.id;
-		if (userId) {
-			await this.redisService.client.srem(
-				`user:${this.config.getOrThrow('SESSION_FOLDER')}${userId}`,
-				sessionId
-			);
-		}
-		return new Promise((resolve, reject) => {
-			req.session.destroy(err => {
-				if (err) {
-					return reject(
-						new InternalServerErrorException(
-							'Failed to destroy session'
-						)
-					);
-				}
-				req.res?.clearCookie(this.config.getOrThrow('SESSION_NAME'));
-
-				resolve(true);
-			});
-		});
+		return destroySession(req, this.redisService, this.config);
 	}
 
 	clearSession(req: Request) {
