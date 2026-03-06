@@ -10,6 +10,7 @@ import { AccountModule } from '../modules/auth/account/account.module';
 import { SessionModule } from '../modules/auth/session/session.module';
 import { VerificationModule } from '@/src/modules/auth/verification/verification.module';
 import { MailModule } from '@/src/modules/libs/mail/mail.module';
+import { ResetPasswordModule } from '@/src/modules/auth/reset-password/reset-password.module';
 @Module({
 	imports: [
 		ConfigModule.forRoot({
@@ -27,7 +28,8 @@ import { MailModule } from '@/src/modules/libs/mail/mail.module';
 		MailModule,
 		AccountModule,
 		SessionModule,
-		VerificationModule
+		VerificationModule,
+		ResetPasswordModule
 	]
 })
 export class CoreModule {}
