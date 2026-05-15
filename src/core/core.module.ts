@@ -11,6 +11,7 @@ import { SessionModule } from '../modules/auth/session/session.module';
 import { VerificationModule } from '@/src/modules/auth/verification/verification.module';
 import { MailModule } from '@/src/modules/libs/mail/mail.module';
 import { ResetPasswordModule } from '@/src/modules/auth/reset-password/reset-password.module';
+import { TotpModule } from '../modules/auth/totp/totp.module';
 @Module({
 	imports: [
 		ConfigModule.forRoot({
@@ -29,7 +30,8 @@ import { ResetPasswordModule } from '@/src/modules/auth/reset-password/reset-pas
 		AccountModule,
 		SessionModule,
 		VerificationModule,
-		ResetPasswordModule
+		ResetPasswordModule,
+		TotpModule
 	]
 })
 export class CoreModule {}

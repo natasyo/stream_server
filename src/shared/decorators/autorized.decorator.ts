@@ -6,6 +6,7 @@ import { Request } from 'express';
 
 export const Authorized = createParamDecorator(
 	(data: keyof User, ctx: ExecutionContext) => {
+		console.log('Authorized decorator');
 		let user: User;
 		if (ctx.getType() === 'http') {
 			const request = ctx.switchToHttp().getRequest<Request>();

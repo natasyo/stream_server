@@ -12,6 +12,8 @@ model User {
   password        String
   userName        String   @unique
   displayName     String?  @map("display_name")
+  isTotpEnabled   Boolean  @default(false)
+  totpSecret      String?
   name            String?
   avatar          String?
   bio             String?

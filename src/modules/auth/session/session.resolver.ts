@@ -6,17 +6,19 @@ import { LoginInput } from './inputs/login.input';
 import { UserAgent } from '@/src/shared/decorators/user.agent';
 import { Authorization } from '@/src/shared/decorators/auth.decorator';
 import { SessionModel } from '@/src/modules/auth/session/models/session.model';
+import { AuthModel } from '@/src/modules/auth/account/models/auth.model';
 
 @Resolver('Session')
 export class SessionResolver {
 	constructor(private readonly sessionService: SessionService) {}
 
-	@Mutation(() => UserModel, { name: 'loginUser' })
+	@Mutation(() => AuthModel, { name: 'loginUser' })
 	async login(
 		@Context() { req }: GqlContext,
 		@Args('loginInput') loginInput: LoginInput,
 		@UserAgent() userAgent: string
 	) {
+		console.log('user');
 		return this.sessionService.login(req, loginInput, userAgent);
 	}
 

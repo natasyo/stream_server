@@ -14,7 +14,10 @@ export class UserModel implements User {
 
 	@Field(() => String)
 	userName: string;
-
+	@Field(() => Boolean)
+	isTotpEnabled: boolean;
+	@Field(() => String)
+	totpSecret: string | null;
 	@Field(() => String, { nullable: true })
 	displayName: string | null;
 
