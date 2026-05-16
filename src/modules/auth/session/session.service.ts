@@ -76,6 +76,7 @@ export class SessionService {
 		{ login, password, pin }: LoginInput,
 		userAgent: string
 	) {
+		console.log('kjxkvjxlkc');
 		const user = await this.prismaService.user.findFirst({
 			where: {
 				OR: [
@@ -114,6 +115,7 @@ export class SessionService {
 			const delta = totp.validate({ token: pin });
 			if (delta === null) throw new BadRequestException('Invalid code');
 		}
+		console.log('-------------');
 		const sessionMetadata = getSessionMetadata(req, userAgent);
 
 		return await saveSession(

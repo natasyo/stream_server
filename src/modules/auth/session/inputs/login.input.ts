@@ -16,6 +16,5 @@ export class LoginInput {
 
 	@Field(() => String, { nullable: true })
 	@IsString()
-	@IsNotEmpty()
-	public pin: string;
+	public pin?: string;
 }

@@ -32,6 +32,7 @@ export class VerificationService {
 				type: TokenType.EMAIL_VERIFY
 			}
 		});
+		console.log(existingToken);
 		if (!existingToken) throw new NotFoundException('Token not found');
 
 		const hasExpired = new Date(existingToken.expiresIn) > new Date();
