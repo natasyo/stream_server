@@ -3,7 +3,6 @@ import { User } from '@prisma/client';
 import { ISessionMetadata } from '@/src/shared/types/session-metadata.types';
 import { RedisService } from '@/src/core/redis/redis.service';
 import { ConfigService } from '@nestjs/config/dist/config.service';
-import { UserModel } from '@/src/modules/auth/account/models/user.model';
 import { InternalServerErrorException } from '@nestjs/common';
 
 export async function saveSession(
@@ -40,7 +39,7 @@ export async function saveSession(
 			ttl
 		);
 	}
-	return user as UserModel;
+	return { user };
 }
 
 export async function destroySession(

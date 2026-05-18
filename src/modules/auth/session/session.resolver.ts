@@ -18,8 +18,12 @@ export class SessionResolver {
 		@Args('loginInput') loginInput: LoginInput,
 		@UserAgent() userAgent: string
 	) {
-		console.log('user');
-		return this.sessionService.login(req, loginInput, userAgent);
+		const result = await this.sessionService.login(
+			req,
+			loginInput,
+			userAgent
+		);
+		return result;
 	}
 
 	@Mutation(() => Boolean, { name: 'logoutUser' })

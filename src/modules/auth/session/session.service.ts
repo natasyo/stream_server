@@ -76,7 +76,6 @@ export class SessionService {
 		{ login, password, pin }: LoginInput,
 		userAgent: string
 	) {
-		console.log('kjxkvjxlkc');
 		const user = await this.prismaService.user.findFirst({
 			where: {
 				OR: [
@@ -99,6 +98,7 @@ export class SessionService {
 				'Email not verified. Go to your email to verify'
 			);
 		}
+
 		if (user.isTotpEnabled) {
 			if (!pin) {
 				return {
