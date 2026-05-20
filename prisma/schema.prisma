@@ -7,13 +7,17 @@ datasource db {
 }
 
 model User {
-  id              String   @id @default(uuid())
-  email           String   @unique
-  password        String
-  userName        String   @unique
-  displayName     String?  @map("display_name")
-  isTotpEnabled   Boolean  @default(false)
-  totpSecret      String?
+  id            String  @id @default(uuid())
+  email         String  @unique
+  password      String
+  userName      String  @unique
+  displayName   String? @map("display_name")
+  isTotpEnabled Boolean @default(false)
+  totpSecret    String?
+
+  isDeactivated Boolean   @default(false)
+  deactivatedAt DateTime?
+
   name            String?
   avatar          String?
   bio             String?
@@ -40,6 +44,7 @@ model Token {
 enum TokenType {
   EMAIL_VERIFY
   RESET_PASSWORD
+  DEACTIVATE_ACCOUNT
 
   @@map("token_types")
 }

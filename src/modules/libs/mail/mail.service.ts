@@ -5,6 +5,9 @@ import { render } from '@react-email/components';
 import { VerificationTemplate } from '@/src/modules/libs/mail/templates/verification.template';
 import { SentMessageInfo } from 'nodemailer';
 import { ResetPasswordTemplate } from '@/src/modules/libs/mail/templates/reset-password.template';
+import { ISessionMetadata } from '@/src/shared/types/session-metadata.types';
+import * as domain from 'node:domain';
+import DeactivateTemplate from '@/src/modules/libs/mail/templates/deactivate.template';
 
 @Injectable()
 export class MailService {
@@ -36,5 +39,13 @@ export class MailService {
 			ResetPasswordTemplate({ token, domain, userAgent })
 		);
 		return this.sendEmail(email, 'Reset password', html);
+	}
+	async sendDeactivateToken(
+		email: string,
+		token: string,
+		metadata: ISessionMetadata
+	): SentMessageInfo {
+		const html = await render(DeactivateTemplate({ token, metadata }));
+		return this.sendEmail(email, 'Деактивация аккаунта', html);
 	}
 }

@@ -21,6 +21,11 @@ export class UserModel implements User {
 	@Field(() => String, { nullable: true })
 	displayName: string | null;
 
+	@Field(() => Boolean)
+	isDeactivated: boolean;
+	@Field(() => Date, { nullable: true })
+	deactivatedAt: Date | null;
+
 	@Field(() => String, { nullable: true })
 	name: string | null;
 
