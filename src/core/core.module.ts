@@ -14,6 +14,7 @@ import { ResetPasswordModule } from '@/src/modules/auth/reset-password/reset-pas
 import { TotpModule } from '../modules/auth/totp/totp.module';
 import { DeactivateModule } from '@/src/modules/auth/deactivate/deactivate.module';
 import { CronModule } from '@/src/modules/cron/cron.module';
+import { StorageModule } from '@/src/modules/libs/storage/storage.module';
 @Module({
 	imports: [
 		ConfigModule.forRoot({
@@ -34,6 +35,7 @@ import { CronModule } from '@/src/modules/cron/cron.module';
 		SessionModule,
 		VerificationModule,
 		ResetPasswordModule,
+		StorageModule,
 		TotpModule,
 		DeactivateModule
 	]

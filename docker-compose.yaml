@@ -53,9 +53,35 @@ services:
             MP_SMTP_AUTH_USERNAME: "test"
             MP_SMTP_AUTH_PASSWORD: "1234"
 
+    minio:
+        image: quay.io/minio/minio
+        container_name: local_minio
+        ports:
+            - "9000:9000"
+            - "9001:9001"
+        environment:
+            MINIO_ROOT_USER: minioadmin
+            MINIO_ROOT_PASSWORD: minioadmin
+        volumes:
+            - minio_data:/data
+        command: server /data --console-address ":9001"
+
+    create_buckets:
+        image: quay.io/minio/mc
+        depends_on:
+            - minio
+        entrypoint: >
+            /bin/sh -c "
+            until (/usr/bin/mc alias set myminio http://minio:9000 minioadmin minioadmin) do echo 'Waiting for MinIO...' && sleep 1; done;
+            /usr/bin/mc mb --ignore-existing myminio/twich;
+            exit 0;
+            "
+
 volumes:
     postgres_data:
     redis_data:
     mailpit:
+    minio_data:
+
 networks:
     stream_server:
