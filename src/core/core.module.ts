@@ -13,6 +13,7 @@ import { MailModule } from '@/src/modules/libs/mail/mail.module';
 import { ResetPasswordModule } from '@/src/modules/auth/reset-password/reset-password.module';
 import { TotpModule } from '../modules/auth/totp/totp.module';
 import { DeactivateModule } from '@/src/modules/auth/deactivate/deactivate.module';
+import { CronModule } from '@/src/modules/cron/cron.module';
 @Module({
 	imports: [
 		ConfigModule.forRoot({
@@ -29,6 +30,7 @@ import { DeactivateModule } from '@/src/modules/auth/deactivate/deactivate.modul
 		RedisModule,
 		MailModule,
 		AccountModule,
+		CronModule,
 		SessionModule,
 		VerificationModule,
 		ResetPasswordModule,

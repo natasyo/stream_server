@@ -6,8 +6,8 @@ import { VerificationTemplate } from '@/src/modules/libs/mail/templates/verifica
 import { SentMessageInfo } from 'nodemailer';
 import { ResetPasswordTemplate } from '@/src/modules/libs/mail/templates/reset-password.template';
 import { ISessionMetadata } from '@/src/shared/types/session-metadata.types';
-import * as domain from 'node:domain';
 import DeactivateTemplate from '@/src/modules/libs/mail/templates/deactivate.template';
+import AccountDeletionTemplate from '@/src/modules/libs/mail/templates/account-deletion.template';
 
 @Injectable()
 export class MailService {
@@ -47,5 +47,9 @@ export class MailService {
 	): SentMessageInfo {
 		const html = await render(DeactivateTemplate({ token, metadata }));
 		return this.sendEmail(email, 'Деактивация аккаунта', html);
+	}
+	async sendAccountDeletion(email: string): SentMessageInfo {
+		const html = await render(AccountDeletionTemplate());
+		return this.sendEmail(email, 'deletion account', html);
 	}
 }

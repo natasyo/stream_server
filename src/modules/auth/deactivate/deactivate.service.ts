@@ -34,9 +34,9 @@ export class DeactivateService {
 		if (!existingToken) {
 			throw new NotFoundException('No token found.');
 		}
-		const hasExpired = new Date(existingToken.expiresIn) < new Date();
+		const hasExpired = new Date(existingToken.expiresIn) > new Date();
 		if (!hasExpired) throw new BadRequestException('Token expired.');
-		const user = await this.prismaService.user.update({
+		await this.prismaService.user.update({
 			where: {
 				id: existingToken.userId
 			},
@@ -69,6 +69,7 @@ export class DeactivateService {
 			await this.sendDeactivateToken(req, user, userAgent);
 			return { message: 'Требуется код подтверждения' };
 		}
+
 		await this.validateDeactivateToken(req, pin);
 		return { user };
 	}
