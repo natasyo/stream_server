@@ -9,6 +9,7 @@ import session from 'express-session';
 import { RedisStore } from 'connect-redis';
 import { parseBoolean } from './shared/utils/parse-boolean.util';
 import { RedisService } from './core/redis/redis.service';
+import { graphqlUploadExpress } from 'graphql-upload-ts';
 
 async function bootstrap() {
 	const myEnv = dotenv.config();
@@ -17,13 +18,16 @@ async function bootstrap() {
 	const config = app.get(ConfigService);
 	const redis = app.get(RedisService);
 	app.use(cookieParser(config.getOrThrow<string>('COOKIE_SECRET')));
-	app.useGlobalPipes(new ValidationPipe({ transform: true }));
+
+	app.use(config.getOrThrow<string>(''));
+
+	app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
 	app.enableCors({
 		origin: [
 			config.getOrThrow<string>('ALLOW_ORIGIN'),
 			config.getOrThrow<string>('APP_URL')
 		],
-		credentials: true,
+		credentials: true
 		// exposedHeaders: ['Set-Cookie']
 	});
 	app.use(

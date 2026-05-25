@@ -15,6 +15,7 @@ import { TotpModule } from '../modules/auth/totp/totp.module';
 import { DeactivateModule } from '@/src/modules/auth/deactivate/deactivate.module';
 import { CronModule } from '@/src/modules/cron/cron.module';
 import { StorageModule } from '@/src/modules/libs/storage/storage.module';
+import { ProfileModule } from '@/src/modules/auth/profile/profile.module';
 @Module({
 	imports: [
 		ConfigModule.forRoot({
@@ -37,7 +38,8 @@ import { StorageModule } from '@/src/modules/libs/storage/storage.module';
 		ResetPasswordModule,
 		StorageModule,
 		TotpModule,
-		DeactivateModule
+		DeactivateModule,
+		ProfileModule
 	]
 })
 export class CoreModule {}
