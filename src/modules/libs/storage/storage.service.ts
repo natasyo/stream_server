@@ -22,7 +22,7 @@ export class StorageService {
 			},
 			forcePathStyle: true
 		});
-		this.bucket = this.configService.getOrThrow<string>(' S3_BUCKET_NAME');
+		this.bucket = this.configService.getOrThrow<string>('S3_BUCKET_NAME');
 	}
 	public async uploadFile(key: string, fileBuffer: Buffer, mimeType: string) {
 		const command = new PutObjectCommand({

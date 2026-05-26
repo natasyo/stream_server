@@ -15,6 +15,7 @@ export class VerificationResolver {
 		@Args('data') input: VerificationInput,
 		@UserAgent() userAgent: string
 	) {
+		console.log(input);
 		return this.verificationService.verify(req, input, userAgent);
 	}
 }

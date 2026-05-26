@@ -18,9 +18,6 @@ async function bootstrap() {
 	const config = app.get(ConfigService);
 	const redis = app.get(RedisService);
 	app.use(cookieParser(config.getOrThrow<string>('COOKIE_SECRET')));
-
-	app.use(config.getOrThrow<string>(''));
-
 	app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
 	app.enableCors({
 		origin: [

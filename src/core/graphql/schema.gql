@@ -110,6 +110,9 @@ type TotpModel {
   secret: String!
 }
 
+"""Кастомный скаляр для загрузки файлов"""
+scalar Upload
+
 type UserModel {
   avatar: String
   bio: String
