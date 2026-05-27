@@ -16,6 +16,12 @@ input ChangePasswordInput {
   oldPassword: String!
 }
 
+input ChangeProfileInput {
+  bio: String!
+  displayName: String!
+  username: String!
+}
+
 input CreateUserInput {
   email: String!
   password: String!
@@ -58,9 +64,12 @@ input LoginInput {
 }
 
 type Mutation {
+  changeAvatar(avatar: Upload!): Boolean!
   changeEmail(data: ChangeEmailInput!): Boolean!
+  changeInfo(data: ChangeProfileInput!): Boolean!
   changePassword(data: ChangePasswordInput!): Boolean!
   clearSessionCookie: Boolean!
+  createSocialLink(data: SocialLinkInput!): Boolean!
   createUser(createUserInput: CreateUserInput!): Boolean!
   deactivateAccount(data: DeactivateAccountInput!): AuthModel!
   disableTotp: Boolean!
@@ -69,8 +78,12 @@ type Mutation {
   loginUser(loginInput: LoginInput!): AuthModel!
   logoutUser: Boolean!
   newPassword(data: NewPasswordInput!): Boolean!
+  removeAvatar: Boolean!
   removeSession(id: String!): Boolean!
+  removeSocialLink(data: SocialLinkInput!, id: String!): Boolean!
+  reorderSocialLink(list: [SocialLinkOrderInput!]!): Boolean!
   resetPassword(data: ResetPasswordInput!): Boolean!
+  updateSocialLink(data: SocialLinkInput!, id: String!): Boolean!
   verifyAccount(data: VerificationInput!): UserModel!
 }
 
@@ -103,6 +116,16 @@ type SessionModel {
   id: ID!
   metadata: SessionMetadataModel!
   userId: String!
+}
+
+input SocialLinkInput {
+  title: String!
+  url: String!
+}
+
+input SocialLinkOrderInput {
+  id: String!
+  position: Float!
 }
 
 type TotpModel {

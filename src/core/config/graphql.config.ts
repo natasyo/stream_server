@@ -12,6 +12,6 @@ export function getGraphQLConfig(
 		debug: true,
 		playground: isDev(configService),
 		path: configService.get<string>('GRAPHQL_PATH') || '/graphql',
-		context: ({ req, res }) => ({ req, res })
+		context: ({ req, res }) => ({ req, res }),
 	};
 }

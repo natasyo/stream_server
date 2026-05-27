@@ -26,7 +26,8 @@ import { ProfileModule } from '@/src/modules/auth/profile/profile.module';
 			driver: ApolloDriver,
 			imports: [ConfigModule],
 			inject: [ConfigService],
-			useFactory: getGraphQLConfig
+			useFactory: getGraphQLConfig,
+
 		}),
 		PrismaModule,
 		RedisModule,
