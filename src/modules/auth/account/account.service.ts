@@ -35,7 +35,8 @@ export class AccountService {
 			throw new ConflictException('Email already exists');
 		}
 		const isExistUserName = await this.prismaService.user.findUnique({
-			where: { userName }
+			where: { userName },
+			include: { socialLinks: true }
 		});
 		if (isExistUserName) {
 			throw new ConflictException('Username already exists');
