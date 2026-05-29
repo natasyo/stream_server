@@ -15,10 +15,9 @@ export class StorageService {
 			endpoint: configService.getOrThrow<string>('S3_ENDPOINT'),
 			region: configService.getOrThrow<string>('S3_REGION'),
 			credentials: {
-				accessKeyId:
-					configService.getOrThrow<string>('S3_ACCESS_KEY_ID'),
+				accessKeyId: configService.getOrThrow<string>('S3_ACCESS_KEY'),
 				secretAccessKey:
-					configService.getOrThrow<string>('S3_SECRET_KEY')
+					configService.getOrThrow<string>('S3_SECRET_KEY_ID')
 			},
 			forcePathStyle: true
 		});

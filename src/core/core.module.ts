@@ -16,6 +16,7 @@ import { DeactivateModule } from '@/src/modules/auth/deactivate/deactivate.modul
 import { CronModule } from '@/src/modules/cron/cron.module';
 import { StorageModule } from '@/src/modules/libs/storage/storage.module';
 import { ProfileModule } from '@/src/modules/auth/profile/profile.module';
+import { StreamModule } from '@/src/modules/stream/stream.module';
 @Module({
 	imports: [
 		ConfigModule.forRoot({
@@ -26,8 +27,7 @@ import { ProfileModule } from '@/src/modules/auth/profile/profile.module';
 			driver: ApolloDriver,
 			imports: [ConfigModule],
 			inject: [ConfigService],
-			useFactory: getGraphQLConfig,
-
+			useFactory: getGraphQLConfig
 		}),
 		PrismaModule,
 		RedisModule,
@@ -40,7 +40,8 @@ import { ProfileModule } from '@/src/modules/auth/profile/profile.module';
 		StorageModule,
 		TotpModule,
 		DeactivateModule,
-		ProfileModule
+		ProfileModule,
+		StreamModule
 	]
 })
 export class CoreModule {}

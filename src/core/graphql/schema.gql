@@ -80,7 +80,7 @@ type Mutation {
   newPassword(data: NewPasswordInput!): Boolean!
   removeAvatar: Boolean!
   removeSession(id: String!): Boolean!
-  removeSocialLink(data: SocialLinkInput!, id: String!): Boolean!
+  removeSocialLink(id: String!): Boolean!
   reorderSocialLink(list: [SocialLinkOrderInput!]!): Boolean!
   resetPassword(data: ResetPasswordInput!): Boolean!
   updateSocialLink(data: SocialLinkInput!, id: String!): Boolean!
@@ -94,9 +94,11 @@ input NewPasswordInput {
 }
 
 type Query {
+  findAll: [StreamModel!]!
   findAllUsers: [UserModel!]!
   findCurrentSession: SessionModel!
   findSessionByUser: [SessionModel!]!
+  findSocialLinks: SocialLinkModel!
   generateTotpSecret: TotpModel!
   getCurrentUser: UserModel!
 }
@@ -123,9 +125,32 @@ input SocialLinkInput {
   url: String!
 }
 
+type SocialLinkModel {
+  createdAt: DateTime!
+  id: ID!
+  position: Float!
+  title: String!
+  updatedAt: DateTime!
+  url: String!
+  userId: String!
+}
+
 input SocialLinkOrderInput {
   id: String!
   position: Float!
+}
+
+type StreamModel {
+  createdAt: DateTime!
+  id: ID!
+  ingressId: String
+  isLive: Boolean!
+  serverUrl: String
+  streamKey: String
+  thumbaiUrl: String
+  title: String!
+  updatedAt: DateTime!
+  userId: String
 }
 
 type TotpModel {
@@ -150,8 +175,11 @@ type UserModel {
   isVerified: Boolean!
   name: String
   password: String!
+  socialLinks: [SocialLinkModel!]!
+  stream: StreamModel!
   totpSecret: String!
   updatedAt: DateTime!
+  user: UserModel!
   userName: String!
 }
 
