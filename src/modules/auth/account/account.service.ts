@@ -29,7 +29,7 @@ export class AccountService {
 	}
 	public async create({ email, password, userName }: CreateUserInput) {
 		const isExistEmail = await this.prismaService.user.findUnique({
-			where: { email }
+			where: { email },
 		});
 		if (isExistEmail) {
 			throw new ConflictException('Email already exists');
@@ -70,7 +70,7 @@ export class AccountService {
 		return true;
 	}
 
-	async changePasword(user: User, input: ChangePasswordInput) {
+	async changePassword(user: User, input: ChangePasswordInput) {
 		const { oldPassword, newPassword } = input;
 		const isValidPassword = await verify(user.password, oldPassword);
 		if (!isValidPassword) {

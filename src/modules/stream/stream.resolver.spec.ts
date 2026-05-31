@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { StreamResolver } from './stream.resolver';
 import { StreamService } from './stream.service';
 import { PrismaService } from '@/src/core/prisma/prisma.service';
+import {StorageService} from "@/src/modules/libs/storage/storage.service";
 
 describe('StreamResolver', () => {
 	let resolver: StreamResolver;
@@ -14,6 +15,10 @@ describe('StreamResolver', () => {
 				{
 					provide: PrismaService,
 					useValue: {}
+				},
+				{
+					provide:StorageService,
+					useValue:{}
 				}
 			]
 		}).compile();

@@ -12,6 +12,10 @@ describe('StreamService', () => {
 				{
 					provide: PrismaService,
 					useValue: {}
+				},
+				{
+					provide:StreamService,
+					useValue:{}
 				}
 			]
 		}).compile();

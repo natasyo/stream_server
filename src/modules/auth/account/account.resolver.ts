@@ -37,7 +37,7 @@ export class AccountResolver {
 		@Authorized() user: User,
 		@Args('data') input: ChangePasswordInput
 	) {
-		return this.accountService.changePasword(user, input);
+		return this.accountService.changePassword(user, input);
 	}
 	@Authorization()
 	@Mutation(() => Boolean)
