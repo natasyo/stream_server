@@ -162,7 +162,7 @@ type StreamModel {
   isLive: Boolean!
   serverUrl: String
   streamKey: String
-  thumbaiUrl: String
+  thumbnailUrl: String
   title: String!
   updatedAt: DateTime!
   userId: String

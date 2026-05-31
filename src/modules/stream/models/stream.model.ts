@@ -8,7 +8,7 @@ export class StreamModel implements Stream {
 	@Field(() => String)
 	title: string;
 	@Field(() => String, { nullable: true })
-	thumbaiUrl: string | null;
+	thumbnailUrl: string | null;
 	@Field(() => String, { nullable: true })
 	ingressId: string | null;
 	@Field(() => String, { nullable: true })

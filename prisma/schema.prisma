@@ -49,7 +49,7 @@ model SocialLink {
 model Stream {
   id         String  @id @default(uuid())
   title      String
-  thumbaiUrl String?
+  thumbnailUrl String?
 
   ingressId String?  @unique
   serverUrl String?

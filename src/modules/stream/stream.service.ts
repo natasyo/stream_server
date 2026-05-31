@@ -118,8 +118,8 @@ export class StreamService {
 		if (!stream) {
 			throw new NotFoundException('Stream does not found');
 		}
-		if (stream.thumbaiUrl) {
-			await this.storageService.deleteFile(stream.thumbaiUrl);
+		if (stream.thumbnailUrl) {
+			await this.storageService.deleteFile(stream.thumbnailUrl);
 		}
 		const chunks: Buffer[] = [];
 		for await (const chunk of file.createReadStream()) {
@@ -139,7 +139,7 @@ export class StreamService {
 		);
 		await this.prismaService.stream.update({
 			where: { userId: user.id },
-			data: { thumbaiUrl: fileName }
+			data: { thumbnailUrl: fileName }
 		});
 		return true;
 	}
@@ -148,11 +148,11 @@ export class StreamService {
 		if (!stream) {
 			throw new NotFoundException('Stream does not found');
 		}
-		if (!stream.thumbaiUrl) return;
-		await this.storageService.deleteFile(stream.thumbaiUrl);
+		if (!stream.thumbnailUrl) return;
+		await this.storageService.deleteFile(stream.thumbnailUrl);
 		await this.prismaService.stream.update({
 			where: { userId: user.id },
-			data: { thumbaiUrl: null }
+			data: { thumbnailUrl: null }
 		});
 		return true;
 	}
