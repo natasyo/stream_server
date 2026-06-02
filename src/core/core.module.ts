@@ -17,6 +17,7 @@ import { CronModule } from '@/src/modules/cron/cron.module';
 import { StorageModule } from '@/src/modules/libs/storage/storage.module';
 import { ProfileModule } from '@/src/modules/auth/profile/profile.module';
 import { StreamModule } from '@/src/modules/stream/stream.module';
+import { WebhookModule } from '@/src/modules/webhook/webhook.module';
 @Module({
 	imports: [
 		ConfigModule.forRoot({
@@ -41,7 +42,8 @@ import { StreamModule } from '@/src/modules/stream/stream.module';
 		TotpModule,
 		DeactivateModule,
 		ProfileModule,
-		StreamModule
+		StreamModule,
+		WebhookModule
 	]
 })
 export class CoreModule {}
